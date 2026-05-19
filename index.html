@@ -1,0 +1,2045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dev Roadmap Tracker · Oct 21 Deadline</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #080810;
+  --bg2:       #0f0f1a;
+  --bg3:       #14141f;
+  --card:      #1a1a28;
+  --card2:     #20202f;
+  --border:    rgba(255,255,255,0.06);
+  --border2:   rgba(255,255,255,0.12);
+  --text:      #e2e2f0;
+  --muted:     #686880;
+  --subtle:    #3a3a52;
+
+  --csharp:    #9b59e8;
+  --csharp-d:  rgba(155,89,232,0.12);
+  --azure:     #0ea5e9;
+  --azure-d:   rgba(14,165,233,0.12);
+  --react:     #38e8c8;
+  --react-d:   rgba(56,232,200,0.12);
+  --projects:  #f59e0b;
+  --projects-d:rgba(245,158,11,0.12);
+  --resources: #f06292;
+  --resources-d:rgba(240,98,146,0.12);
+
+  --green:     #22c55e;
+  --green-d:   rgba(34,197,94,0.15);
+  --red:       #ef4444;
+
+  --radius:    10px;
+  --radius-lg: 16px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── Scanline overlay ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* ─── Top nav ─── */
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: rgba(8,8,16,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  height: 52px;
+  gap: 2rem;
+}
+
+.nav-brand {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+}
+
+.nav-brand span { color: var(--green); }
+
+.nav-tabs {
+  display: flex;
+  gap: 2px;
+  flex: 1;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-tabs::-webkit-scrollbar { display: none; }
+
+.nav-tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  transition: all 0.2s;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  background: none;
+  font-family: 'Outfit', sans-serif;
+}
+
+.nav-tab:hover { color: var(--text); background: var(--card); }
+
+.nav-tab.active {
+  color: var(--text);
+  background: var(--card);
+  border-color: var(--border2);
+}
+
+.nav-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.countdown-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+}
+.cd-label { color: var(--muted); }
+.cd-val { color: var(--projects); font-weight: 600; }
+
+.global-pct {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--green);
+  font-weight: 600;
+}
+
+/* ─── Hero ─── */
+.hero {
+  padding: 3.5rem 2rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-eyebrow::before { content: '> '; color: var(--green); }
+
+.hero h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #fff 0%, #9b8ec4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 540px;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+/* ─── Stats bar ─── */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  max-width: 1100px;
+  margin: 0 auto 2rem;
+  padding: 0 2rem;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stat-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.stat-ring {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.stat-ring svg {
+  width: 36px;
+  height: 36px;
+  transform: rotate(-90deg);
+}
+
+.ring-track {
+  fill: none;
+  stroke: var(--subtle);
+  stroke-width: 3;
+}
+
+.ring-fill {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 88;
+  stroke-dashoffset: 88;
+  transition: stroke-dashoffset 0.6s ease;
+}
+
+.stat-count {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-total {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ─── Global progress bar ─── */
+.global-progress {
+  max-width: 1100px;
+  margin: 0 auto 2rem;
+  padding: 0 2rem;
+}
+
+.gp-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.gp-track {
+  height: 5px;
+  background: var(--card);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.gp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--csharp), var(--azure), var(--react));
+  background-size: 200%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* ─── Tab content ─── */
+.tab-content { display: none; max-width: 1100px; margin: 0 auto; padding: 0 2rem 5rem; }
+.tab-content.active { display: block; }
+
+/* ─── Section header ─── */
+.section-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 1.5rem;
+  padding: 18px 22px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: none; } }
+
+.sb-icon {
+  font-size: 28px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.sb-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.sb-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.sb-pct {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 28px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* ─── Info callout ─── */
+.callout {
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  line-height: 1.7;
+  border-left: 3px solid;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.callout-icon { flex-shrink: 0; font-size: 15px; margin-top: 1px; }
+.callout-text { flex: 1; }
+.callout-text strong { display: block; margin-bottom: 2px; font-size: 13px; font-weight: 600; }
+
+/* ─── Phase block ─── */
+.phase-block {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 14px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+  animation: fadeIn 0.3s ease;
+}
+
+.phase-block:hover { border-color: var(--border2); }
+
+.phase-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 20px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+
+.phase-head:hover { background: var(--card2); }
+
+.ph-accent { width: 3px; border-radius: 2px; height: 22px; flex-shrink: 0; }
+
+.ph-info { flex: 1; }
+.ph-title { font-size: 15px; font-weight: 600; }
+.ph-meta { font-size: 11px; color: var(--muted); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
+
+.ph-badge {
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.ph-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ph-prog-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.ph-chevron {
+  font-size: 12px;
+  color: var(--muted);
+  transition: transform 0.25s;
+}
+
+.phase-block.open .ph-chevron { transform: rotate(180deg); }
+
+.phase-body {
+  display: none;
+  border-top: 1px solid var(--border);
+}
+
+.phase-block.open .phase-body { display: block; }
+
+/* ─── Week grid ─── */
+.week-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.week-cell {
+  padding: 16px 20px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.week-cell:nth-child(even) { border-right: none; }
+.week-cell:last-child { border-bottom: none; }
+.week-cell:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+.week-cell:last-child:nth-child(odd) { grid-column: span 2; }
+
+.wc-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.wc-week {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.wc-title {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ─── Checkbox items ─── */
+.check-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-bottom: 7px;
+  cursor: pointer;
+  group: true;
+}
+
+.check-row input[type="checkbox"] { display: none; }
+
+.cb-visual {
+  width: 17px;
+  height: 17px;
+  border: 1.5px solid var(--border2);
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  background: var(--bg2);
+}
+
+.check-row input:checked + .cb-visual {
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.check-row input:checked + .cb-visual::after {
+  content: '✓';
+  font-size: 10px;
+  color: #000;
+  font-weight: 700;
+}
+
+.cb-label {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  transition: all 0.2s;
+}
+
+.check-row:has(input:checked) .cb-label {
+  color: var(--subtle);
+  text-decoration: line-through;
+}
+
+/* ─── Phase footer note ─── */
+.phase-note {
+  padding: 10px 20px;
+  font-size: 11px;
+  color: var(--muted);
+  background: var(--bg3);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ─── Project card ─── */
+.project-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 14px;
+  animation: fadeIn 0.3s ease;
+}
+
+.proj-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--card2);
+  border-bottom: 1px solid var(--border);
+}
+
+.proj-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.proj-name { font-size: 15px; font-weight: 600; flex: 1; }
+
+.proj-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.proj-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.proj-col { padding: 16px 20px; }
+.proj-col + .proj-col { border-left: 1px solid var(--border); }
+
+.proj-col-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+
+.interview-point {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.interview-point::before {
+  content: '→';
+  color: var(--projects);
+  flex-shrink: 0;
+}
+
+/* ─── Resources tab ─── */
+.resources-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.res-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  animation: fadeIn 0.3s ease;
+  transition: border-color 0.2s, transform 0.15s;
+}
+
+.res-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-1px);
+}
+
+.res-card-head {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  background: var(--card2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.res-phase-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 3px 9px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+
+.res-card-title { font-size: 14px; font-weight: 600; }
+
+.res-card-body { padding: 14px 18px; }
+
+.res-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--azure);
+  text-decoration: none;
+  margin-bottom: 10px;
+  transition: opacity 0.15s;
+}
+
+.res-link:hover { opacity: 0.75; }
+.res-link::before { content: '↗'; font-size: 12px; }
+
+.res-why { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+.res-free {
+  display: inline-block;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: var(--green-d);
+  color: var(--green);
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.res-paid {
+  display: inline-block;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: rgba(245,158,11,0.12);
+  color: var(--projects);
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* ─── App timeline (job applications) ─── */
+.app-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.app-col {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  animation: fadeIn 0.3s ease;
+}
+
+.app-col-month {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.month-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+/* ─── Reset btn ─── */
+.reset-wrap {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.reset-btn {
+  background: none;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 9px 22px;
+  border-radius: 6px;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  transition: all 0.2s;
+}
+
+.reset-btn:hover { border-color: var(--red); color: var(--red); }
+
+/* ─── Color helpers ─── */
+.c-csharp   { color: var(--csharp); }
+.c-azure    { color: var(--azure); }
+.c-react    { color: var(--react); }
+.c-projects { color: var(--projects); }
+.c-green    { color: var(--green); }
+
+.bg-csharp    { background: var(--csharp-d);    color: var(--csharp); }
+.bg-azure     { background: var(--azure-d);     color: var(--azure); }
+.bg-react     { background: var(--react-d);     color: var(--react); }
+.bg-projects  { background: var(--projects-d);  color: var(--projects); }
+.bg-resources { background: var(--resources-d); color: var(--resources); }
+
+.bar-csharp   { background: var(--csharp); }
+.bar-azure    { background: var(--azure); }
+.bar-react    { background: var(--react); }
+.bar-projects { background: var(--projects); }
+
+.sb-csharp   { background: var(--csharp-d);   border-color: rgba(155,89,232,0.2); }
+.sb-azure    { background: var(--azure-d);    border-color: rgba(14,165,233,0.2); }
+.sb-react    { background: var(--react-d);    border-color: rgba(56,232,200,0.2); }
+.sb-projects { background: var(--projects-d); border-color: rgba(245,158,11,0.2); }
+.sb-res      { background: var(--resources-d);border-color: rgba(240,98,146,0.2); }
+
+.ring-csharp   { stroke: var(--csharp); }
+.ring-azure    { stroke: var(--azure); }
+.ring-react    { stroke: var(--react); }
+.ring-projects { stroke: var(--projects); }
+.ring-global   { stroke: var(--green); }
+
+/* ─── Callout variants ─── */
+.callout-purple { background: var(--csharp-d); border-color: var(--csharp); color: #c4b0f5; }
+.callout-blue   { background: var(--azure-d);  border-color: var(--azure);  color: #93d4f5; }
+.callout-teal   { background: var(--react-d);  border-color: var(--react);  color: #7ef5e7; }
+.callout-amber  { background: var(--projects-d);border-color: var(--projects);color: #fcd68a; }
+
+/* ─── Week timeline strip ─── */
+.week-strip {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+.week-strip::-webkit-scrollbar { display: none; }
+
+.ws-cell {
+  flex-shrink: 0;
+  min-width: 52px;
+  height: 36px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  cursor: default;
+  transition: all 0.2s;
+  line-height: 1.3;
+}
+
+.ws-cell.current {
+  border-color: var(--green);
+  background: var(--green-d);
+  color: var(--green);
+}
+
+.ws-cell.proj { border-color: var(--projects); background: var(--projects-d); color: var(--projects); }
+
+@media (max-width: 700px) {
+  .stats-bar       { grid-template-columns: 1fr 1fr; }
+  .week-grid       { grid-template-columns: 1fr; }
+  .week-cell       { border-right: none; }
+  .proj-body       { grid-template-columns: 1fr; }
+  .proj-col + .proj-col { border-left: none; border-top: 1px solid var(--border); }
+  .resources-grid  { grid-template-columns: 1fr; }
+  .app-cols        { grid-template-columns: 1fr; }
+  .topnav          { padding: 0 1rem; gap: 1rem; }
+  .tab-content, .stats-bar, .global-progress, .hero { padding-left: 1rem; padding-right: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav class="topnav">
+  <div class="nav-brand"><span>></span> roadmap.exe</div>
+
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchTab('csharp')">
+      <div class="nav-dot" style="background:var(--csharp)"></div>C# .NET
+    </button>
+    <button class="nav-tab" onclick="switchTab('azure')">
+      <div class="nav-dot" style="background:var(--azure)"></div>Azure
+    </button>
+    <button class="nav-tab" onclick="switchTab('react')">
+      <div class="nav-dot" style="background:var(--react)"></div>React
+    </button>
+    <button class="nav-tab" onclick="switchTab('projects')">
+      <div class="nav-dot" style="background:var(--projects)"></div>Projects
+    </button>
+    <button class="nav-tab" onclick="switchTab('resources')">
+      <div class="nav-dot" style="background:var(--resources)"></div>Resources
+    </button>
+  </div>
+
+  <div class="nav-right">
+    <div class="countdown-wrap">
+      <span class="cd-label">oct 21 →</span>
+      <span class="cd-val" id="cd-days">—</span>
+    </div>
+    <div class="global-pct" id="nav-pct">0%</div>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-eyebrow">16–18 week accelerated plan · 2YOE backend engineer</div>
+  <h1>.NET · Azure · React<br>Job-Ready Roadmap</h1>
+  <p class="hero-sub">Everything from the 6-month plan, compressed to hit October 21. Check topics as you finish them — progress saves in your browser.</p>
+</div>
+
+<!-- ═══ STATS BAR ═══ -->
+<div class="stats-bar">
+  <div class="stat-card">
+    <div class="stat-top">
+      <div>
+        <div class="stat-label">C# · .NET</div>
+        <div class="stat-count c-csharp" id="cs-done">0</div>
+        <div class="stat-total" id="cs-total">/ 0 topics</div>
+      </div>
+      <div class="stat-ring">
+        <svg viewBox="0 0 36 36">
+          <circle class="ring-track" cx="18" cy="18" r="14"/>
+          <circle class="ring-fill ring-csharp" cx="18" cy="18" r="14" id="ring-cs"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-top">
+      <div>
+        <div class="stat-label">Azure</div>
+        <div class="stat-count c-azure" id="az-done">0</div>
+        <div class="stat-total" id="az-total">/ 0 topics</div>
+      </div>
+      <div class="stat-ring">
+        <svg viewBox="0 0 36 36">
+          <circle class="ring-track" cx="18" cy="18" r="14"/>
+          <circle class="ring-fill ring-azure" cx="18" cy="18" r="14" id="ring-az"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-top">
+      <div>
+        <div class="stat-label">React</div>
+        <div class="stat-count c-react" id="re-done">0</div>
+        <div class="stat-total" id="re-total">/ 0 topics</div>
+      </div>
+      <div class="stat-ring">
+        <svg viewBox="0 0 36 36">
+          <circle class="ring-track" cx="18" cy="18" r="14"/>
+          <circle class="ring-fill ring-react" cx="18" cy="18" r="14" id="ring-re"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-top">
+      <div>
+        <div class="stat-label">Projects</div>
+        <div class="stat-count c-projects" id="pr-done">0</div>
+        <div class="stat-total" id="pr-total">/ 0 items</div>
+      </div>
+      <div class="stat-ring">
+        <svg viewBox="0 0 36 36">
+          <circle class="ring-track" cx="18" cy="18" r="14"/>
+          <circle class="ring-fill ring-projects" cx="18" cy="18" r="14" id="ring-pr"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-top">
+      <div>
+        <div class="stat-label">Overall</div>
+        <div class="stat-count c-green" id="all-done">0</div>
+        <div class="stat-total" id="all-total">/ 0 total</div>
+      </div>
+      <div class="stat-ring">
+        <svg viewBox="0 0 36 36">
+          <circle class="ring-track" cx="18" cy="18" r="14"/>
+          <circle class="ring-fill ring-global" cx="18" cy="18" r="14" id="ring-all"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Global progress bar -->
+<div class="global-progress">
+  <div class="gp-row">
+    <span>overall progress</span>
+    <span id="gp-pct">0%</span>
+  </div>
+  <div class="gp-track"><div class="gp-fill" id="gp-fill" style="width:0%"></div></div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     TAB: C# / .NET
+══════════════════════════════════════════ -->
+<div class="tab-content active" id="tab-csharp">
+
+  <div class="section-banner sb-csharp">
+    <div class="sb-icon">⚡</div>
+    <div>
+      <div class="sb-title c-csharp">C# & .NET</div>
+      <div class="sb-sub">Weeks 1–11 · Language core → Architecture → Testing → Background jobs · ~110 hrs</div>
+    </div>
+    <div class="sb-pct c-csharp" id="sb-pct-cs">0%</div>
+  </div>
+
+  <!-- Week timeline -->
+  <div class="week-strip" id="strip-cs"></div>
+
+  <div class="callout callout-purple">
+    <div class="callout-icon">💡</div>
+    <div class="callout-text">
+      <strong>Goal for this section</strong>
+      Go from "I've used it without understanding it" to "I can explain every line I write." The 6-month curriculum is all here — just accelerated. Tick topics as you go. Weekend = revision only, no new topics.
+    </div>
+  </div>
+
+  <!-- Phase 1: Language Core -->
+  <div class="phase-block open" id="ph-cs1">
+    <div class="phase-head" onclick="togglePhase('ph-cs1')">
+      <div class="ph-accent bar-csharp"></div>
+      <div class="ph-info">
+        <div class="ph-title">Phase 1 · C# Language Core</div>
+        <div class="ph-meta">Weeks 1–3 · ~30 hrs · TCS Udemy C# Beginners Guide</div>
+      </div>
+      <span class="ph-badge bg-csharp" id="bd-cs1">0 / 16</span>
+      <div class="ph-chevron">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="week-grid">
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 1</span><span class="wc-title">Types & control flow</span></div>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Value types vs reference types</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Nullable types and null coalescing (?? operator)</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Control flow: if/else, switch expressions</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Methods, parameters, ref/out keywords</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 2</span><span class="wc-title">OOP fundamentals</span></div>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Classes, constructors, access modifiers</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Inheritance, virtual/override, sealed</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Interfaces vs abstract classes — when to use each</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Generics: List&lt;T&gt;, Dictionary&lt;K,V&gt;, IEnumerable&lt;T&gt;</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 3</span><span class="wc-title">LINQ & async/await</span></div>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">LINQ: Where, Select, FirstOrDefault, GroupBy, OrderBy</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Method chaining and deferred execution</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Task, async, await — what actually runs on what thread</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">ConfigureAwait(false) and deadlock scenarios</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 3 cont.</span><span class="wc-title">Exceptions & logging</span></div>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Try/catch/finally, when/filter clauses</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Custom exception classes and throwing properly</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">ILogger&lt;T&gt; — structured logging basics</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Log levels: Debug/Info/Warning/Error — when to use</span></label>
+        </div>
+      </div>
+      <div class="phase-note">📚 TCS Udemy: C# Programming Beginners Guide — complete Sections 1–8 this phase</div>
+    </div>
+  </div>
+
+  <!-- Phase 2: ASP.NET Core -->
+  <div class="phase-block" id="ph-cs2">
+    <div class="phase-head" onclick="togglePhase('ph-cs2')">
+      <div class="ph-accent bar-csharp"></div>
+      <div class="ph-info">
+        <div class="ph-title">Phase 2 · ASP.NET Core Web API</div>
+        <div class="ph-meta">Weeks 4–6 · ~30 hrs · TCS Udemy Build REST APIs course</div>
+      </div>
+      <span class="ph-badge bg-csharp" id="bd-cs2">0 / 20</span>
+      <div class="ph-chevron">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="week-grid">
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 4</span><span class="wc-title">HTTP & controllers</span></div>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">How an HTTP request travels to your controller action</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Route attributes: [Route], [HttpGet], [HttpPost]</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Action results: Ok(), NotFound(), BadRequest(), Created()</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Model binding from body, route, and query string</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Data annotations for validation ([Required], [Range])</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 5</span><span class="wc-title">Middleware & DI</span></div>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Middleware pipeline — request/response flow</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Write a custom middleware (global error handler)</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Dependency injection — what the container actually does</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Scoped vs Transient vs Singleton — with real examples</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">IOptions&lt;T&gt; pattern for configuration</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 6</span><span class="wc-title">EF Core & JWT</span></div>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">DbContext, DbSet, OnModelCreating configuration</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Migrations: add-migration, update-database, rollback</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">CRUD operations with EF Core and async patterns</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">AutoMapper for DTO ↔ entity mapping</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">JWT auth: generate token, validate, add to controller</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 6 cont.</span><span class="wc-title">Swagger & API polish</span></div>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Swagger/OpenAPI setup and JWT auth in Swagger UI</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Global exception handling middleware (ProblemDetails)</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Pagination pattern: PagedResult&lt;T&gt;</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Filtering and sorting query patterns</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">API versioning basics</span></label>
+        </div>
+      </div>
+      <div class="phase-note">📚 TCS Udemy: Build REST APIs with ASP.NET Core + EF — this is your primary source for Phase 2</div>
+    </div>
+  </div>
+
+  <!-- Phase 3: Architecture -->
+  <div class="phase-block" id="ph-cs3">
+    <div class="phase-head" onclick="togglePhase('ph-cs3')">
+      <div class="ph-accent bar-csharp"></div>
+      <div class="ph-info">
+        <div class="ph-title">Phase 3 · Clean Architecture & CQRS</div>
+        <div class="ph-meta">Weeks 7–8 · ~20 hrs · Milan Jovanović YouTube</div>
+      </div>
+      <span class="ph-badge bg-csharp" id="bd-cs3">0 / 12</span>
+      <div class="ph-chevron">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="week-grid">
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 7</span><span class="wc-title">Clean architecture</span></div>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">The 4 layers: Domain, Application, Infrastructure, API</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Dependency rule: inner layers don't reference outer</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Repository pattern — what it solves and when not to use it</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Refactor Project 1 into clean arch structure</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 8</span><span class="wc-title">CQRS & design patterns</span></div>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">CQRS concept: separate read/write models</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">MediatR: IRequest, IRequestHandler, pipeline behaviours</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">FluentValidation with MediatR pipeline</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Domain events basics</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 8 cont.</span><span class="wc-title">Practical patterns</span></div>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Result pattern (instead of throwing exceptions)</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Factory and Strategy patterns — real use cases</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Decorator pattern for cross-cutting concerns</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Jason Taylor clean arch template — read the structure</span></label>
+        </div>
+      </div>
+      <div class="phase-note">📺 Milan Jovanović YouTube (@MilanJovanovic) — clean arch + CQRS playlist. Watch, pause, implement on Project 1.</div>
+    </div>
+  </div>
+
+  <!-- Phase 4: SQL + Testing -->
+  <div class="phase-block" id="ph-cs4">
+    <div class="phase-head" onclick="togglePhase('ph-cs4')">
+      <div class="ph-accent bar-csharp"></div>
+      <div class="ph-info">
+        <div class="ph-title">Phase 4 · SQL Depth + Testing</div>
+        <div class="ph-meta">Weeks 9–10 · ~20 hrs · Nick Chapsas YouTube + MS Docs</div>
+      </div>
+      <span class="ph-badge bg-csharp" id="bd-cs4">0 / 16</span>
+      <div class="ph-chevron">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="week-grid">
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 9</span><span class="wc-title">SQL depth</span></div>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">INNER / LEFT / RIGHT JOINs and when to use each</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Indexes: clustered vs non-clustered, covering indexes</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Transactions and isolation levels (Read Committed etc.)</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">N+1 problem: what it is, how EF Core causes it, Include() fix</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 9 cont.</span><span class="wc-title">EF Core advanced</span></div>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">AsNoTracking() for read-only queries</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Raw SQL with FromSqlRaw and ExecuteSqlRaw</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Concurrency tokens and optimistic concurrency</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Database design: normalization, foreign keys</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 10</span><span class="wc-title">Unit testing</span></div>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">xUnit: Facts, Theories, Arrange–Act–Assert pattern</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Mocking with Moq: Setup, Verify, It.IsAny()</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">What to unit test vs what not to test</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Write tests for Project 1 service layer</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 10 cont.</span><span class="wc-title">Integration testing</span></div>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">WebApplicationFactory setup for integration tests</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">In-memory database vs real DB in tests</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Test HTTP endpoints end-to-end</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">FluentAssertions for readable test assertions</span></label>
+        </div>
+      </div>
+      <div class="phase-note">📺 Nick Chapsas YouTube — search "unit testing .NET" and "integration testing ASP.NET Core"</div>
+    </div>
+  </div>
+
+  <!-- Phase 5: Auth + Background + API -->
+  <div class="phase-block" id="ph-cs5">
+    <div class="phase-head" onclick="togglePhase('ph-cs5')">
+      <div class="ph-accent bar-csharp"></div>
+      <div class="ph-info">
+        <div class="ph-title">Phase 5 · Auth Deep-dive + Background Jobs + API Polish</div>
+        <div class="ph-meta">Weeks 11–13 · ~25 hrs · Nick Chapsas + MS Docs</div>
+      </div>
+      <span class="ph-badge bg-csharp" id="bd-cs5">0 / 20</span>
+      <div class="ph-chevron">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="week-grid">
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 11</span><span class="wc-title">Auth deep-dive</span></div>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">JWT internals: header, payload, signature, expiry</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Refresh tokens: storage, rotation, revocation</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Role-based authorization: [Authorize(Roles = "Admin")]</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Policy-based auth: IAuthorizationRequirement</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">ASP.NET Core Identity basics (UserManager, SignInManager)</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 12</span><span class="wc-title">Background jobs & messaging</span></div>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">IHostedService and BackgroundService base class</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Hangfire: setup, fire-and-forget, recurring jobs, dashboard</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Polly: retry, circuit breaker, timeout policies</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">HttpClientFactory + Polly for resilient HTTP calls</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Why message queues exist vs in-process jobs</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 13</span><span class="wc-title">Caching</span></div>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">IMemoryCache: setup, eviction, cache-aside pattern</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">IDistributedCache with Redis (local Redis via Docker)</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Response caching middleware and ETags</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Cache invalidation strategies</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 13 cont.</span><span class="wc-title">API production patterns</span></div>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Rate limiting in ASP.NET Core 7+</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Health checks: AddHealthChecks(), MapHealthChecks()</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Minimal APIs vs Controllers — trade-offs</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">IExceptionHandler (new in .NET 8) for global errors</span></label>
+          <label class="check-row"><input type="checkbox" data-group="cs" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Feature flags with Microsoft.FeatureManagement</span></label>
+        </div>
+      </div>
+      <div class="phase-note">📺 Nick Chapsas + Milan Jovanović for auth deep-dive. MS Docs for Hangfire + Polly reference.</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     TAB: AZURE
+══════════════════════════════════════════ -->
+<div class="tab-content" id="tab-azure">
+
+  <div class="section-banner sb-azure">
+    <div class="sb-icon">☁️</div>
+    <div>
+      <div class="sb-title c-azure">Azure Cloud</div>
+      <div class="sb-sub">Weeks 10–16 · Core services → CI/CD → Monitoring → Containers · ~60 hrs</div>
+    </div>
+    <div class="sb-pct c-azure" id="sb-pct-az">0%</div>
+  </div>
+
+  <div class="week-strip" id="strip-az"></div>
+
+  <div class="callout callout-blue">
+    <div class="callout-icon">☁️</div>
+    <div class="callout-text">
+      <strong>Use MS Learn AZ-204 modules — free, with sandbox</strong>
+      Don't study for the exam. Use the learning path for the sandbox environments (free Azure resources). App Service, SQL, Blob, Service Bus, Key Vault — all have hands-on labs. Do the lab, then apply it to your project.
+    </div>
+  </div>
+
+  <div class="phase-block open" id="ph-az1">
+    <div class="phase-head" onclick="togglePhase('ph-az1')">
+      <div class="ph-accent bar-azure"></div>
+      <div class="ph-info">
+        <div class="ph-title">Phase 1 · Azure Core Services</div>
+        <div class="ph-meta">Weeks 10–12 · ~25 hrs · MS Learn AZ-204</div>
+      </div>
+      <span class="ph-badge bg-azure" id="bd-az1">0 / 16</span>
+      <div class="ph-chevron">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="week-grid">
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 10</span><span class="wc-title">Azure fundamentals</span></div>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Resource groups, subscriptions, regions, tenants</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Azure Portal navigation — find and create resources</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Azure CLI basics: az login, az group create, az webapp</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Pricing calculator — understand what costs what</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 10–11</span><span class="wc-title">App Service + Azure SQL</span></div>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">App Service plans: Free → Basic → Standard tiers</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Deploy .NET API to App Service from VS / CLI</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Azure SQL Database: create, firewall rules, connection string</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">App Settings vs Environment Variables in App Service</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 11</span><span class="wc-title">Blob Storage</span></div>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Storage account, containers, blobs — what they are</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Upload/download files from .NET using BlobServiceClient</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">SAS tokens for temporary secure access</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Access tiers: Hot / Cool / Archive</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 12</span><span class="wc-title">Key Vault + Identity</span></div>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Azure Key Vault: secrets, keys, certificates</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Read secrets from .NET using Azure.Extensions.AspNetCore</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Managed Identity: system-assigned vs user-assigned</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">DefaultAzureCredential — passwordless auth to Azure services</span></label>
+        </div>
+      </div>
+      <div class="phase-note">🔗 learn.microsoft.com → search AZ-204 → use the free sandbox labs for each service</div>
+    </div>
+  </div>
+
+  <div class="phase-block" id="ph-az2">
+    <div class="phase-head" onclick="togglePhase('ph-az2')">
+      <div class="ph-accent bar-azure"></div>
+      <div class="ph-info">
+        <div class="ph-title">Phase 2 · Service Bus + CI/CD</div>
+        <div class="ph-meta">Weeks 12–14 · ~20 hrs · GitHub Actions Docs + MS Learn</div>
+      </div>
+      <span class="ph-badge bg-azure" id="bd-az2">0 / 16</span>
+      <div class="ph-chevron">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="week-grid">
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 12–13</span><span class="wc-title">Azure Service Bus</span></div>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Queues vs Topics vs Subscriptions — when to use</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Send and receive messages from .NET (ServiceBusClient)</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Dead-letter queue and message retry behaviour</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Replace a Hangfire job with Service Bus in Project 2</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 13</span><span class="wc-title">GitHub Actions CI/CD</span></div>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">YAML workflow syntax: on, jobs, steps, uses, run</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Build: dotnet restore → build → test in workflow</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Deploy to Azure App Service with azure/webapps-deploy action</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">GitHub Secrets for connection strings and credentials</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 14</span><span class="wc-title">CI/CD advanced</span></div>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Environments: staging vs production gates</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Branch protection: require CI to pass before merge</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">EF Core migration step in deploy pipeline</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Publish artifacts and download between jobs</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 14</span><span class="wc-title">Infrastructure as Code intro</span></div>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">What IaC is and why it matters (Bicep/ARM overview)</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Write a basic Bicep file to create an App Service</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Deploy Bicep from GitHub Actions workflow</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Workload Identity Federation — no secrets in GitHub</span></label>
+        </div>
+      </div>
+      <div class="phase-note">🔗 GitHub Actions docs → quickstart: Deploy to Azure App Service. Follow exactly for Project 1 first.</div>
+    </div>
+  </div>
+
+  <div class="phase-block" id="ph-az3">
+    <div class="phase-head" onclick="togglePhase('ph-az3')">
+      <div class="ph-accent bar-azure"></div>
+      <div class="ph-info">
+        <div class="ph-title">Phase 3 · Monitoring + Containers</div>
+        <div class="ph-meta">Weeks 15–16 · ~15 hrs · MS Learn + Docker Docs</div>
+      </div>
+      <span class="ph-badge bg-azure" id="bd-az3">0 / 16</span>
+      <div class="ph-chevron">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="week-grid">
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 15</span><span class="wc-title">Application Insights</span></div>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Wire up Application Insights to your .NET API</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Logs, traces, and requests in Azure Portal</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Custom telemetry: TelemetryClient.TrackEvent()</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Live Metrics view during load testing</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 15</span><span class="wc-title">Alerting & dashboards</span></div>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Create an alert rule (error rate spike)</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Log Analytics workspace and KQL basics</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Azure Monitor dashboard with key metrics</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Distributed tracing across services</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 16</span><span class="wc-title">Docker</span></div>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Docker concepts: images, containers, layers, registry</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Write a Dockerfile for your .NET API</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Multi-stage builds for smaller production images</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">docker-compose for local API + DB setup</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Week 16</span><span class="wc-title">Azure Container Apps</span></div>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Push image to Azure Container Registry (ACR)</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Deploy container to Azure Container Apps</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Scaling rules: CPU/memory/HTTP-based</span></label>
+          <label class="check-row"><input type="checkbox" data-group="az" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Dapr sidecar intro (optional bonus)</span></label>
+        </div>
+      </div>
+      <div class="phase-note">🔗 MS Learn: Monitor apps with Application Insights · Docker docs: Get started guide</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     TAB: REACT
+══════════════════════════════════════════ -->
+<div class="tab-content" id="tab-react">
+
+  <div class="section-banner sb-react">
+    <div class="sb-icon">⚛️</div>
+    <div>
+      <div class="sb-title c-react">React</div>
+      <div class="sb-sub">Start after Week 13 (when backend feels natural) · 4 steps · Connect to your own .NET API</div>
+    </div>
+    <div class="sb-pct c-react" id="sb-pct-re">0%</div>
+  </div>
+
+  <div class="callout callout-teal">
+    <div class="callout-icon">⚛️</div>
+    <div class="callout-text">
+      <strong>Backend first. React second. No exceptions.</strong>
+      Start React only when you feel confident explaining DI, middleware, and EF Core without looking it up. Since your API already exists, React clicks much faster — you're just building a UI for something that works. Resource: react.dev/learn (official docs, genuinely excellent).
+    </div>
+  </div>
+
+  <div class="phase-block open" id="ph-re1">
+    <div class="phase-head" onclick="togglePhase('ph-re1')">
+      <div class="ph-accent bar-react"></div>
+      <div class="ph-info">
+        <div class="ph-title">Step 1 · JavaScript & TypeScript</div>
+        <div class="ph-meta">~1 week · JS.info + TypeScript handbook</div>
+      </div>
+      <span class="ph-badge bg-react" id="bd-re1">0 / 12</span>
+      <div class="ph-chevron">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="week-grid">
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">JS Core</span><span class="wc-title">Modern JavaScript</span></div>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Arrow functions, template literals, optional chaining (?.)</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Destructuring objects and arrays, spread operator</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Array methods: map, filter, reduce, find, some</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Promises, async/await, error handling with try/catch</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Fetch API: GET, POST with JSON body, headers</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">ES Modules: import/export, default vs named</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">TypeScript</span><span class="wc-title">TS basics for React</span></div>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Primitive types, union types (string | null), type aliases</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Interfaces: define shape of API responses</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Generics: Array&lt;T&gt;, Promise&lt;T&gt;</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Type assertions, as keyword, unknown vs any</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Typing React component props with interfaces</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">tsconfig.json: strict mode, target, module</span></label>
+        </div>
+      </div>
+      <div class="phase-note">📚 js.info (The Modern JavaScript Tutorial) — free, excellent. TypeScript: typescriptlang.org/docs/handbook</div>
+    </div>
+  </div>
+
+  <div class="phase-block" id="ph-re2">
+    <div class="phase-head" onclick="togglePhase('ph-re2')">
+      <div class="ph-accent bar-react"></div>
+      <div class="ph-info">
+        <div class="ph-title">Step 2 · React Fundamentals</div>
+        <div class="ph-meta">~1–2 weeks · react.dev/learn</div>
+      </div>
+      <span class="ph-badge bg-react" id="bd-re2">0 / 16</span>
+      <div class="ph-chevron">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="week-grid">
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Core concepts</span><span class="wc-title">Components & JSX</span></div>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Functional components and JSX syntax</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Props: passing data into components, prop types</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Conditional rendering (&&, ternary, early return)</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Lists and keys: mapping arrays to JSX</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">State</span><span class="wc-title">useState & forms</span></div>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">useState: state updates, why they're async</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Controlled inputs: value + onChange pattern</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Form submission, preventDefault</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Lifting state up to parent component</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Effects</span><span class="wc-title">useEffect & data fetching</span></div>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">useEffect: dependency array, cleanup function</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Fetch data from your .NET API on mount</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Loading and error states (isLoading, error)</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Custom hook: useFetch&lt;T&gt;(url)</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Context & Router</span><span class="wc-title">Global state & routing</span></div>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">useContext for auth state (token, user)</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">React Router v6: BrowserRouter, Route, Link, useNavigate</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Protected routes (redirect if not logged in)</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">JWT token: store in memory, attach to API calls</span></label>
+        </div>
+      </div>
+      <div class="phase-note">📚 react.dev/learn — do "Quick Start" then "Thinking in React" first. That's your foundation.</div>
+    </div>
+  </div>
+
+  <div class="phase-block" id="ph-re3">
+    <div class="phase-head" onclick="togglePhase('ph-re3')">
+      <div class="ph-accent bar-react"></div>
+      <div class="ph-info">
+        <div class="ph-title">Step 3 · React + Your .NET API</div>
+        <div class="ph-meta">~1 week · Build a real UI for your Task Manager API</div>
+      </div>
+      <span class="ph-badge bg-react" id="bd-re3">0 / 12</span>
+      <div class="ph-chevron">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="week-grid">
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Build it</span><span class="wc-title">Task Manager UI</span></div>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Login page → POST to /auth/login → store JWT</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Task list page → GET /tasks with Authorization header</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Create/Edit task form → POST/PUT /tasks</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Delete with confirmation dialog → DELETE /tasks/:id</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">CORS configured in .NET API to allow React dev server</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Axios or fetch wrapper with base URL + auth header</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Styling</span><span class="wc-title">Tailwind CSS</span></div>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Install Tailwind in Vite + React project</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Utility classes: flex, grid, spacing, typography</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Responsive design: sm:, md:, lg: prefixes</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Component library: shadcn/ui or HeadlessUI (optional)</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Dark mode toggle with Tailwind dark: prefix</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Loading spinners, toast notifications</span></label>
+        </div>
+      </div>
+      <div class="phase-note">🛠 Use Vite + React + TypeScript template: `npm create vite@latest myapp -- --template react-ts`</div>
+    </div>
+  </div>
+
+  <div class="phase-block" id="ph-re4">
+    <div class="phase-head" onclick="togglePhase('ph-re4')">
+      <div class="ph-accent bar-react"></div>
+      <div class="ph-info">
+        <div class="ph-title">Step 4 · Deploy on Azure Static Web Apps</div>
+        <div class="ph-meta">~3–4 days · Full-stack portfolio piece</div>
+      </div>
+      <span class="ph-badge bg-react" id="bd-re4">0 / 8</span>
+      <div class="ph-chevron">▾</div>
+    </div>
+    <div class="phase-body">
+      <div class="week-grid">
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Deploy</span><span class="wc-title">Azure Static Web Apps</span></div>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Create Azure Static Web App resource</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Connect GitHub repo — auto-generates Actions workflow</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Set VITE_API_URL env var pointing to .NET API</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Custom domain setup (optional but impressive)</span></label>
+        </div>
+        <div class="week-cell">
+          <div class="wc-header"><span class="wc-week">Polish</span><span class="wc-title">Portfolio ready</span></div>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Update .NET API CORS to allow Static Web App URL</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Test full flow: login → CRUD → logout on live URLs</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">README with architecture diagram and live links</span></label>
+          <label class="check-row"><input type="checkbox" data-group="re" onchange="save()"><div class="cb-visual"></div><span class="cb-label">✅ Full-stack portfolio piece — live and shareable</span></label>
+        </div>
+      </div>
+      <div class="phase-note">🔗 MS Learn: Publish React app with Azure Static Web Apps — free guided tutorial</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     TAB: PROJECTS
+══════════════════════════════════════════ -->
+<div class="tab-content" id="tab-projects">
+
+  <div class="section-banner sb-projects">
+    <div class="sb-icon">🛠</div>
+    <div>
+      <div class="sb-title c-projects">Projects</div>
+      <div class="sb-sub">2 projects · 1 simple + 1 medium · Both deployed live on Azure · Both on GitHub</div>
+    </div>
+    <div class="sb-pct c-projects" id="sb-pct-pr">0%</div>
+  </div>
+
+  <div class="callout callout-amber">
+    <div class="callout-icon">🎯</div>
+    <div class="callout-text">
+      <strong>Projects are your proof</strong>
+      A deployed, live project with a GitHub link is worth more than any certification at the 2YOE level. Every item in these checklists exists because an interviewer will ask about it — not because it's nice to have.
+    </div>
+  </div>
+
+  <!-- Project 1 -->
+  <div class="project-card">
+    <div class="proj-head">
+      <span class="proj-tag bg-csharp">Project 1 · Weeks 7–8 · Simple</span>
+      <span class="proj-name">Task Manager REST API</span>
+      <span class="proj-count" id="ct-p1">0 / 14</span>
+    </div>
+    <div class="proj-body">
+      <div class="proj-col">
+        <div class="proj-col-label">Build checklist</div>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">CRUD for tasks: create, read (all + by id), update, delete</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">User registration and login endpoints</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">JWT auth — protect task endpoints, users see only their tasks</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Refresh token endpoint</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">EF Core + SQLite → migrate to Azure SQL later</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">AutoMapper: entity ↔ DTO separation</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Global error handling middleware (ProblemDetails RFC 7807)</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Swagger UI with JWT auth support</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Pagination on GET /tasks (page, pageSize)</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">At least 5 unit tests on the service layer</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Refactored into clean architecture (Week 8)</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Deployed to Azure App Service + Azure SQL</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">CI/CD pipeline via GitHub Actions</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">✅ GitHub repo live with README + Swagger URL</span></label>
+      </div>
+      <div class="proj-col">
+        <div class="proj-col-label">Interview talking points</div>
+        <div class="interview-point">JWT: "I implemented refresh token rotation — old token invalidated on each use"</div>
+        <div class="interview-point">DI: "Every dependency is injected via constructor — I used Scoped for DbContext because..."</div>
+        <div class="interview-point">Middleware: "I have a global exception handler that returns RFC 7807 ProblemDetails"</div>
+        <div class="interview-point">Testing: "I have unit tests for service layer using Moq for the repository"</div>
+        <div class="interview-point">Azure: "It's deployed on App Service with a GitHub Actions pipeline that runs tests before deploy"</div>
+        <div class="proj-col-label" style="margin-top:16px;">Timeline</div>
+        <div style="font-size:12px; color:var(--muted); line-height:1.8;">
+          <div>📅 Start: end of Week 6</div>
+          <div>📅 First deploy: end of Week 8</div>
+          <div>📅 Start applications: end of July</div>
+          <div>📅 Refactor: after Week 8 (clean arch)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project 2 -->
+  <div class="project-card">
+    <div class="proj-head">
+      <span class="proj-tag bg-azure">Project 2 · Weeks 14–18 · Medium</span>
+      <span class="proj-name">Expense Tracker — Full Backend + Azure</span>
+      <span class="proj-count" id="ct-p2">0 / 16</span>
+    </div>
+    <div class="proj-body">
+      <div class="proj-col">
+        <div class="proj-col-label">Build checklist</div>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Multi-user expense management API (full clean architecture)</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">CQRS with MediatR — separate commands and queries</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Role-based auth: Admin (all expenses) vs User (own only)</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Receipt upload to Azure Blob Storage (with SAS URL return)</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Azure SQL with EF Core (relationships, migrations)</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Azure Service Bus: monthly summary email job</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Background consumer: listen on Service Bus queue</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Azure Key Vault for all secrets (no hardcoded strings)</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Managed Identity to authenticate to Azure services</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Application Insights — request tracing + custom events</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Polly retry policies for Service Bus and external HTTP</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Full CI/CD: GitHub Actions → Azure App Service</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Integration tests for key endpoints</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Health checks endpoint (/health)</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">README with architecture diagram (even hand-drawn is fine)</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">✅ Live on Azure — shareable URL in GitHub README</span></label>
+      </div>
+      <div class="proj-col">
+        <div class="proj-col-label">Interview talking points</div>
+        <div class="interview-point">Architecture: "I chose clean arch because it enforces dependency inversion — my domain doesn't know about SQL"</div>
+        <div class="interview-point">CQRS: "Commands mutate state, queries never do — MediatR handles dispatch"</div>
+        <div class="interview-point">Service Bus: "Decoupled the monthly email from the request lifecycle — no timeout risk"</div>
+        <div class="interview-point">Security: "No secrets in code or config — everything via Key Vault + Managed Identity"</div>
+        <div class="interview-point">CI/CD: "Tests run on every push — deploy only happens if all pass"</div>
+        <div class="interview-point">Monitoring: "App Insights helped me find a N+1 query on the expense listing endpoint"</div>
+        <div class="proj-col-label" style="margin-top:16px;">Timeline</div>
+        <div style="font-size:12px; color:var(--muted); line-height:1.8;">
+          <div>📅 Start: Week 14 (early August)</div>
+          <div>📅 Core done: Week 16</div>
+          <div>📅 Polish + deploy: Week 17–18</div>
+          <div>📅 Live by: mid-September</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Job applications -->
+  <div style="margin-top:1.5rem;">
+    <div class="section-banner sb-projects" style="margin-bottom:1rem;">
+      <div class="sb-icon">📨</div>
+      <div>
+        <div class="sb-title c-projects">Job Applications</div>
+        <div class="sb-sub">Start end of July — don't wait for Project 2</div>
+      </div>
+    </div>
+
+    <div class="app-cols">
+      <div class="app-col">
+        <div class="app-col-month"><div class="month-dot" style="background:var(--projects)"></div>July (end)</div>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Resume updated — Project 1 with live URL</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">LinkedIn headline: ".NET Backend Developer"</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">First 10 applications sent</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">5 STAR behavioural stories written out</span></label>
+      </div>
+      <div class="app-col">
+        <div class="app-col-month"><div class="month-dot" style="background:var(--azure)"></div>August–September</div>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">5–8 applications per week consistently</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Neetcode Blind 75 (Arrays + Strings + Hashmaps)</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">1 system design concept per week</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Resume updated — Project 2 added (when live)</span></label>
+      </div>
+      <div class="app-col">
+        <div class="app-col-month"><div class="month-dot" style="background:var(--green)"></div>October → Oct 21</div>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Active interview rounds (follow up on Sept apps)</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">1 mock interview (record yourself)</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">Negotiate — first number is never final</span></label>
+        <label class="check-row"><input type="checkbox" data-group="pr" onchange="save()"><div class="cb-visual"></div><span class="cb-label">🎉 Offer accepted</span></label>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     TAB: RESOURCES
+══════════════════════════════════════════ -->
+<div class="tab-content" id="tab-resources">
+
+  <div class="section-banner sb-res">
+    <div class="sb-icon">📚</div>
+    <div>
+      <div class="sb-title" style="color:var(--resources)">Resources</div>
+      <div class="sb-sub">One primary source per topic. Finish it. Move on. No course hopping.</div>
+    </div>
+  </div>
+
+  <div class="callout callout-purple">
+    <div class="callout-icon">⚠️</div>
+    <div class="callout-text">
+      <strong>The anti-pattern that kills progress</strong>
+      Collecting 10 courses and finishing none. Every resource here is curated for your specific plan. If the primary isn't clicking after 2 days, switch to the backup — not a third option you find on Reddit.
+    </div>
+  </div>
+
+  <div style="margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em;">Your enrolled courses — use these first</div>
+
+  <div class="resources-grid" style="margin-bottom:20px;">
+    <div class="res-card">
+      <div class="res-card-head">
+        <span class="res-phase-tag bg-csharp">C# · Weeks 1–3</span>
+        <span class="res-card-title">TCS Udemy: C# Beginners</span>
+      </div>
+      <div class="res-card-body">
+        <div class="res-why">Your enrolled course — use for Weeks 1–3. Language core, OOP, LINQ. Stop when you're comfortable writing a class with interfaces and chaining LINQ. Don't finish the whole thing if it starts covering topics ahead of schedule.</div>
+      </div>
+    </div>
+    <div class="res-card">
+      <div class="res-card-head">
+        <span class="res-phase-tag bg-csharp">ASP.NET · Weeks 4–6</span>
+        <span class="res-card-title">TCS Udemy: Build REST APIs</span>
+      </div>
+      <div class="res-card-body">
+        <div class="res-why">Your enrolled course — primary source for Weeks 4–6 and Project 1. Covers controllers, EF Core, Repository Pattern, AutoMapper, JWT in one flow. Type every line from scratch, never copy-paste. This course alone gets you to Project 1.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em;">Free resources — backend & architecture</div>
+
+  <div class="resources-grid" style="margin-bottom:20px;">
+    <div class="res-card">
+      <div class="res-card-head">
+        <span class="res-phase-tag bg-csharp">Architecture · Wks 7–8</span>
+        <span class="res-card-title">Milan Jovanović — YouTube <span class="res-free">free</span></span>
+      </div>
+      <div class="res-card-body">
+        <a href="https://www.youtube.com/@MilanJovanovic" target="_blank" class="res-link">youtube.com/@MilanJovanovic</a>
+        <div class="res-why">Best free resource for modern .NET — clean architecture, CQRS, MediatR, vertical slice, domain events. This channel alone covers Phase 3 of the .NET section. Watch, pause, implement on Project 1 in parallel.</div>
+      </div>
+    </div>
+    <div class="res-card">
+      <div class="res-card-head">
+        <span class="res-phase-tag bg-csharp">Testing + advanced · Wks 9–13</span>
+        <span class="res-card-title">Nick Chapsas — YouTube <span class="res-free">free</span></span>
+      </div>
+      <div class="res-card-body">
+        <a href="https://www.youtube.com/@nickchapsas" target="_blank" class="res-link">youtube.com/@nickchapsas</a>
+        <div class="res-why">Search: "unit testing .NET", "integration testing ASP.NET Core", "JWT refresh tokens .NET", "rate limiting .NET 7". Covers everything from Phase 4–5. His content is production-grade — not beginner-padded.</div>
+      </div>
+    </div>
+    <div class="res-card">
+      <div class="res-card-head">
+        <span class="res-phase-tag bg-csharp">ASP.NET Backup</span>
+        <span class="res-card-title">Kudvenkat — YouTube <span class="res-free">free</span></span>
+      </div>
+      <div class="res-card-body">
+        <a href="https://www.youtube.com/@kudvenkat" target="_blank" class="res-link">youtube.com/@kudvenkat</a>
+        <div class="res-why">If the Udemy course isn't clicking, switch here. Very detailed, methodical pace. Search "ASP.NET Core Web API kudvenkat". Indian instructor, excellent for building intuition step by step.</div>
+      </div>
+    </div>
+    <div class="res-card">
+      <div class="res-card-head">
+        <span class="res-phase-tag bg-csharp">Clean arch reference</span>
+        <span class="res-card-title">Jason Taylor Template — GitHub <span class="res-free">free</span></span>
+      </div>
+      <div class="res-card-body">
+        <a href="https://github.com/jasontaylordev/CleanArchitecture" target="_blank" class="res-link">github.com/jasontaylordev/CleanArchitecture</a>
+        <div class="res-why">Don't clone and use blindly. Open the repo, read every folder, understand why each file is where it is. This is the real-world reference implementation. Use it as a map, not a starting point.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em;">Azure</div>
+
+  <div class="resources-grid" style="margin-bottom:20px;">
+    <div class="res-card">
+      <div class="res-card-head">
+        <span class="res-phase-tag bg-azure">Azure · Wks 10–16</span>
+        <span class="res-card-title">MS Learn — AZ-204 Path <span class="res-free">free + sandbox</span></span>
+      </div>
+      <div class="res-card-body">
+        <a href="https://learn.microsoft.com/en-us/credentials/certifications/azure-developer/" target="_blank" class="res-link">learn.microsoft.com → AZ-204</a>
+        <div class="res-why">Don't study for the exam. Use the learning modules — they include free Azure sandbox environments. App Service, SQL, Blob, Service Bus, Key Vault, App Insights are all covered with hands-on labs. Do the lab, then apply to your project.</div>
+      </div>
+    </div>
+    <div class="res-card">
+      <div class="res-card-head">
+        <span class="res-phase-tag bg-azure">CI/CD</span>
+        <span class="res-card-title">GitHub Actions Docs <span class="res-free">free</span></span>
+      </div>
+      <div class="res-card-body">
+        <a href="https://docs.github.com/en/actions/deployment/deploying-to-your-cloud-provider/deploying-to-azure/deploying-net-to-azure-app-service" target="_blank" class="res-link">GitHub Actions → Deploy .NET to Azure</a>
+        <div class="res-why">The official quickstart for deploying .NET to Azure App Service via GitHub Actions is exactly what you need. Follow it verbatim for Project 1's pipeline. It covers build, test, and deploy steps.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em;">React</div>
+
+  <div class="resources-grid" style="margin-bottom:20px;">
+    <div class="res-card">
+      <div class="res-card-head">
+        <span class="res-phase-tag bg-react">React</span>
+        <span class="res-card-title">React Official Docs <span class="res-free">free</span></span>
+      </div>
+      <div class="res-card-body">
+        <a href="https://react.dev/learn" target="_blank" class="res-link">react.dev/learn</a>
+        <div class="res-why">The new docs (react.dev) are genuinely the best React learning resource. Start with "Quick Start" and "Thinking in React". These two pages alone give you the mental model. Do the interactive examples, don't just read.</div>
+      </div>
+    </div>
+    <div class="res-card">
+      <div class="res-card-head">
+        <span class="res-phase-tag bg-react">JavaScript</span>
+        <span class="res-card-title">The Modern JS Tutorial <span class="res-free">free</span></span>
+      </div>
+      <div class="res-card-body">
+        <a href="https://javascript.info" target="_blank" class="res-link">javascript.info</a>
+        <div class="res-why">The best free JavaScript resource online. Read Part 1 (Language) — specifically: functions, objects, arrays, promises, and async/await. Skip the browser and DOM sections for now; focus on the language itself.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em;">Interview preparation</div>
+
+  <div class="resources-grid">
+    <div class="res-card">
+      <div class="res-card-head">
+        <span class="res-phase-tag" style="background:rgba(34,197,94,0.12); color:var(--green)">DSA · Sep–Oct</span>
+        <span class="res-card-title">Neetcode — Blind 75 <span class="res-free">free</span></span>
+      </div>
+      <div class="res-card-body">
+        <a href="https://neetcode.io/practice" target="_blank" class="res-link">neetcode.io/practice</a>
+        <div class="res-why">Don't do all 75. Focus on: Arrays, Strings, Hash Maps, Two Pointers, Sliding Window. That's ~25 problems and covers 80% of what backend .NET roles ask. Solve in C# — not Python — so you practice the language you'll interview in.</div>
+      </div>
+    </div>
+    <div class="res-card">
+      <div class="res-card-head">
+        <span class="res-phase-tag" style="background:rgba(34,197,94,0.12); color:var(--green)">System Design · Sep</span>
+        <span class="res-card-title">System Design Primer <span class="res-free">free</span></span>
+      </div>
+      <div class="res-card-body">
+        <a href="https://github.com/donnemartin/system-design-primer" target="_blank" class="res-link">github.com/donnemartin/system-design-primer</a>
+        <div class="res-why">Read the "How to approach" section and the basics: load balancers, caching, databases, queues, CDN. You don't need deep system design for 2YOE roles — just enough to talk intelligently and not blank out.</div>
+      </div>
+    </div>
+    <div class="res-card">
+      <div class="res-card-head">
+        <span class="res-phase-tag bg-csharp">Optional paid</span>
+        <span class="res-card-title">Dometrain — Clean Architecture <span class="res-paid">~$50</span></span>
+      </div>
+      <div class="res-card-body">
+        <a href="https://dometrain.com" target="_blank" class="res-link">dometrain.com</a>
+        <div class="res-why">Made by Nick Chapsas. Worth it if you have the budget, but Milan's free YouTube channel covers 80% of the content. Only buy this if you want a structured course experience for clean architecture.</div>
+      </div>
+    </div>
+    <div class="res-card">
+      <div class="res-card-head">
+        <span class="res-phase-tag" style="background:rgba(34,197,94,0.12); color:var(--green)">ASP.NET reference</span>
+        <span class="res-card-title">MS Docs — ASP.NET Core <span class="res-free">free</span></span>
+      </div>
+      <div class="res-card-body">
+        <a href="https://learn.microsoft.com/en-us/aspnet/core" target="_blank" class="res-link">learn.microsoft.com/aspnet/core</a>
+        <div class="res-why">Don't use as primary learning. Use as reference when you're stuck on something specific — middleware, auth, EF Core. The docs are excellent for looking up "how does X work exactly" after you've already learned the concept.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reset-wrap">
+    <button class="reset-btn" onclick="resetAll()">⚠ reset all progress</button>
+  </div>
+
+</div>
+
+
+<script>
+// ─── DATA ───────────────────────────────────────────────
+const STORAGE_KEY = 'roadmap_v3';
+const GROUPS = {
+  cs: { done: 'cs-done', total: 'cs-total', ring: 'ring-cs', sbPct: 'sb-pct-cs' },
+  az: { done: 'az-done', total: 'az-total', ring: 'ring-az', sbPct: 'sb-pct-az' },
+  re: { done: 're-done', total: 're-total', ring: 'ring-re', sbPct: 'sb-pct-re' },
+  pr: { done: 'pr-done', total: 'pr-total', ring: 'ring-pr', sbPct: 'sb-pct-pr' }
+};
+
+const PHASE_BADGES = {
+  'ph-cs1': 'bd-cs1', 'ph-cs2': 'bd-cs2', 'ph-cs3': 'bd-cs3',
+  'ph-cs4': 'bd-cs4', 'ph-cs5': 'bd-cs5',
+  'ph-az1': 'bd-az1', 'ph-az2': 'bd-az2', 'ph-az3': 'bd-az3',
+  'ph-re1': 'bd-re1', 'ph-re2': 'bd-re2', 'ph-re3': 'bd-re3', 'ph-re4': 'bd-re4'
+};
+
+// ─── TABS ───────────────────────────────────────────────
+function switchTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─── PHASE TOGGLE ───────────────────────────────────────
+function togglePhase(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+// ─── PROGRESS ───────────────────────────────────────────
+function setRing(ringId, pct) {
+  const el = document.getElementById(ringId);
+  if (!el) return;
+  const circumference = 88;
+  el.style.strokeDashoffset = circumference - (circumference * pct / 100);
+}
+
+function updateProgress() {
+  // per group
+  Object.entries(GROUPS).forEach(([group, ids]) => {
+    const cbs = document.querySelectorAll(`input[data-group="${group}"]`);
+    const total = cbs.length;
+    const done = [...cbs].filter(c => c.checked).length;
+    const pct = total ? Math.round(done / total * 100) : 0;
+
+    document.getElementById(ids.done).textContent = done;
+    document.getElementById(ids.total).textContent = `/ ${total} ${group === 'pr' ? 'items' : 'topics'}`;
+    setRing(ids.ring, pct);
+    const sbEl = document.getElementById(ids.sbPct);
+    if (sbEl) sbEl.textContent = pct + '%';
+  });
+
+  // per phase
+  Object.entries(PHASE_BADGES).forEach(([phId, bdId]) => {
+    const ph = document.getElementById(phId);
+    if (!ph) return;
+    const cbs = ph.querySelectorAll('input[type="checkbox"]');
+    const done = [...cbs].filter(c => c.checked).length;
+    document.getElementById(bdId).textContent = `${done} / ${cbs.length}`;
+  });
+
+  // project counts
+  ['ct-p1', 'ct-p2'].forEach((elId, i) => {
+    const card = document.querySelectorAll('.project-card')[i];
+    if (!card) return;
+    const cbs = card.querySelectorAll('input[type="checkbox"]');
+    const done = [...cbs].filter(c => c.checked).length;
+    document.getElementById(elId).textContent = `${done} / ${cbs.length}`;
+  });
+
+  // global
+  const allCbs = document.querySelectorAll('input[type="checkbox"]');
+  const total = allCbs.length;
+  const done = [...allCbs].filter(c => c.checked).length;
+  const pct = total ? Math.round(done / total * 100) : 0;
+
+  document.getElementById('all-done').textContent = done;
+  document.getElementById('all-total').textContent = `/ ${total} total`;
+  setRing('ring-all', pct);
+  document.getElementById('gp-fill').style.width = pct + '%';
+  document.getElementById('gp-pct').textContent = pct + '%';
+  document.getElementById('nav-pct').textContent = pct + '%';
+
+  save();
+}
+
+// ─── PERSISTENCE ────────────────────────────────────────
+function save() {
+  const cbs = document.querySelectorAll('input[type="checkbox"]');
+  const state = {};
+  cbs.forEach((cb, i) => { state[i] = cb.checked; });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function load() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+  try {
+    const state = JSON.parse(raw);
+    const cbs = document.querySelectorAll('input[type="checkbox"]');
+    cbs.forEach((cb, i) => { if (state[i]) cb.checked = true; });
+  } catch(e) {}
+}
+
+function resetAll() {
+  if (!confirm('Reset all progress? This cannot be undone.')) return;
+  document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+  localStorage.removeItem(STORAGE_KEY);
+  updateProgress();
+}
+
+// ─── COUNTDOWN ──────────────────────────────────────────
+function updateCountdown() {
+  const deadline = new Date('2025-10-21T00:00:00');
+  const now = new Date();
+  const diff = Math.ceil((deadline - now) / 86400000);
+  const el = document.getElementById('cd-days');
+  if (diff > 0) el.textContent = diff + 'd';
+  else if (diff === 0) el.textContent = 'today!';
+  else el.textContent = 'passed';
+}
+
+// ─── WEEK STRIPS ────────────────────────────────────────
+function buildStrip(containerId, weeks) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  weeks.forEach(w => {
+    const cell = document.createElement('div');
+    cell.className = 'ws-cell' + (w.type === 'current' ? ' current' : '') + (w.type === 'proj' ? ' proj' : '');
+    cell.innerHTML = `<span>${w.label}</span><span style="font-size:8px;margin-top:1px;">${w.sub}</span>`;
+    el.appendChild(cell);
+  });
+}
+
+buildStrip('strip-cs', [
+  {label:'Wk 1',sub:'C# basics'},{label:'Wk 2',sub:'OOP'},{label:'Wk 3',sub:'LINQ/async'},
+  {label:'Wk 4',sub:'Web API'},{label:'Wk 5',sub:'DI/MW'},{label:'Wk 6',sub:'EF+JWT'},
+  {label:'Wk 7–8',sub:'Project 1',type:'proj'},{label:'Wk 8',sub:'Clean arch'},
+  {label:'Wk 9',sub:'SQL+Tests'},{label:'Wk 10',sub:'Testing'},{label:'Wk 11',sub:'Auth'},
+  {label:'Wk 12',sub:'Jobs'},{label:'Wk 13',sub:'Cache'}
+]);
+
+buildStrip('strip-az', [
+  {label:'Wk 10',sub:'Azure core'},{label:'Wk 11',sub:'SQL+Blob'},
+  {label:'Wk 12',sub:'KV+MI'},{label:'Wk 13',sub:'Service Bus'},
+  {label:'Wk 13–14',sub:'CI/CD'},{label:'Wk 14',sub:'IaC'},
+  {label:'Wk 15',sub:'Insights'},{label:'Wk 16',sub:'Docker+ACA'}
+]);
+
+// ─── INIT ────────────────────────────────────────────────
+updateCountdown();
+load();
+updateProgress();
+
+// attach change listeners after load
+document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+  cb.addEventListener('change', updateProgress);
+});
+</script>
+</body>
+</html>
